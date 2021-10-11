@@ -19,7 +19,7 @@ public class GUI extends JPanel {
 	private GraphicsPanel puzzleGraphics;
 	private int ROWS;
 	private int COLS;
-	JLabel currentMovesLabel;
+	public static JLabel currentMovesLabel = new JLabel();
 
 	public GUI(int rows, int cols) {
 		// Create a button. Add a listener to it.
@@ -30,6 +30,11 @@ public class GUI extends JPanel {
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
 		controlPanel.add(newGameButton);
+		
+		currentMovesLabel = new JLabel("", JLabel.CENTER);
+		currentMovesLabel.setText(String.valueOf(0));
+//		currentMovesLabel.setText(String.valueOf(puzzleModel.getMoveCount()));
+//		controlPanel.add(currentMovesLabel);
 
 		// Create graphics panel
 		ROWS = rows;
@@ -41,6 +46,10 @@ public class GUI extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.add(controlPanel, BorderLayout.NORTH);
 		this.add(puzzleGraphics, BorderLayout.CENTER);
+		this.add(currentMovesLabel, BorderLayout.SOUTH);
+		
+		currentMovesLabel.setText("0");
+		
 	}
 
 	Model getPuzzleModel() {
@@ -50,13 +59,18 @@ public class GUI extends JPanel {
 	GraphicsPanel getGraphicsPanel() {
 		return puzzleGraphics;
 	}
+	
+	
 
 	public class NewGameAction implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			puzzleModel.reset();
+//			System.out.println("Now"+puzzleModel.moveCount);
 			puzzleModel.shuffle();
+			puzzleModel.flag = 0;
 			puzzleGraphics.repaint();
 			puzzleGraphics.setBackground(Color.black);
+			currentMovesLabel.setText(String.valueOf(puzzleModel.getMoveCount()));
 		}
 	}
 }
