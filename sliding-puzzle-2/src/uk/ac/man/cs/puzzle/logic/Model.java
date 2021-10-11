@@ -1,5 +1,7 @@
 package uk.ac.man.cs.puzzle.logic;
 
+import uk.ac.man.cs.puzzle.gui.GUI;
+
 public class Model {
 	private static int ROWS;
 	private static int COLS;
@@ -9,10 +11,18 @@ public class Model {
 
 	private int gameTime; // The number of seconds the game has been played for so far
 
+	public int moveCount; // Created moveCount.
+	
+	public int flag = 0;//flag for moveCounter to determine whether to increase.
+	
 	public Model(int rows, int cols) {
 		ROWS = rows;
 		COLS = cols;
 		contents = new Tile[rows][cols];
+		
+		moveCount = 0;
+		GUI.currentMovesLabel.setText(String.valueOf(getMoveCount()));
+		
 		reset();
 	}
 
@@ -33,8 +43,11 @@ public class Model {
 		emptyTile = contents[ROWS - 1][COLS - 1];
 		emptyTile.setFace(null);
 
-		// Reset game timer
+		// Reset game timer and move counter.
 		gameTime = 0;
+		
+		moveCount = 0;
+		GUI.currentMovesLabel.setText(String.valueOf(getMoveCount()));
 	}
 
 	// Shuffle the tiles around to create a new game.
@@ -44,8 +57,13 @@ public class Model {
 		for (int i = 0; i < rand; i++) {
 			int r = (int) (Math.random() * ROWS);
 			int c = (int) (Math.random() * COLS);
+			
+			flag = 1;
+			
 			moveTile(r, c);
 		}
+		
+		flag = 0;
 	}
 
 	// Move a tile to empty position beside it, if possible.
@@ -78,6 +96,16 @@ public class Model {
 		Tile temp = contents[r1][c1];
 		contents[r1][c1] = contents[r2][c2];
 		contents[r2][c2] = temp;
+		
+		if (flag == 1) {
+			GUI.currentMovesLabel.setText(String.valueOf(getMoveCount()));
+			flag = 0;
+//			System.out.println("0");
+		}else{
+			moveCount ++;
+			GUI.currentMovesLabel.setText(String.valueOf(getMoveCount()));
+//			System.out.println("1");
+		}
 	}
 
 	public boolean gameOver() {
@@ -108,4 +136,16 @@ public class Model {
 	public void incrementGameTime() {
 		gameTime += 1;
 	}
+
+	public int getMoveCount() {
+		// TODO Auto-generated method stub
+		return moveCount;
+	}
+	
+	public void resetMoveCounter() {
+		// TODO Auto-generated method stub
+		moveCount = 0;
+		GUI.currentMovesLabel.setText("0");
+	}
+
 }

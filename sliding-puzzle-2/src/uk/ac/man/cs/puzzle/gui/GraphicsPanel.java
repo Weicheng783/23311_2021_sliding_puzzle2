@@ -68,9 +68,15 @@ public class GraphicsPanel extends JPanel implements MouseListener {
 		if (!puzzleModel.moveTile(row, col)) {
 			// moveTile moves tile if legal, else returns false.
 			Toolkit.getDefaultToolkit().beep();
+		}else {
+//			puzzleModel.moveCount ++;
+//			System.out.println("Now"+puzzleModel.moveCount);
 		}
 
 		this.repaint(); // Show any updates to model.
+		
+		GUI.currentMovesLabel.setText(String.valueOf(puzzleModel.getMoveCount()));
+		
 		if (puzzleModel.gameOver()) {
 			this.setBackground(Color.green);
 		}
